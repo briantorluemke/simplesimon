@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Simon</title>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="../css/simon.css">
+</head>
+<body>
+<h1>Simple Simon!</h1>
+<br>
+<h3 class="timer">5</h3>
+<button type="button" class="start btn btn-dark">Start game!</button>
+<h3 class="gameover hidden">Game over!</h3>
+<br>
+<div class="simon-game">
+    <div class="full-circle">
+        <div id=""></div>
+        <div id="green" class="semi-circle green"></div>
+        <div id="red" class="semi-circle red"></div>
+        <div id="yellow" class="semi-circle yellow"></div>
+        <div id="blue" class="semi-circle green"></div>
+    </div>
+</div>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.3/jquery.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js" integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl" crossorigin="anonymous"></script>
+<script>
+    (function () {
+        "use strict";
+
+        var winningPattern = [];
+        var userPattern = [];
+        var currentRound = 0;
+        var colors = ["green", "red", "yellow", "blue"];
+        var gameActive = false;
+        var green = $(".green");
+        var red = $(".red");
+        var yellow = $(".yellow");
+        var blue = $(".blue");
+        var count = 5;
+        var counter;
+
+        // counts game down before beginning
+        function countdown() {
+            if (count <= 0) {
+                clearInterval(counter);
+            }else {
+                count = count-1;
+                $(".timer").text(count);
+            }
+        }
+
+        // function to play the game
+        function startGame() {
+            var random = Math.floor(Math.random() * 4);
+            if (random === 0) {
+                winningPattern.push("green");
+                $(".green").addClass("dark");
+                setTimeout(function () {
+                    $(".semi-circle").removeClass("dark");
+                }, 150);
+            }
+            if (random === 1) {
+                winningPattern.push("red")
+            }
+            if (random === 2) {
+                winningPattern.push("yellow")
+            }
+            if (random === 3) {
+                winningPattern.push("blue")
+            }
+            console.log(winningPattern);
+        }
+
+        // function that fires when game ends
+        function gameOver() {
+            userPattern = [];
+            winningPattern = [];
+            count = 5;
+            gameActive = false;
+            $(".gameover").removeClass("hidden");
+        }
+
+        // start button to begin game
+        $(".start").click(function () {
+            counter = setInterval(countdown, 500);
+            $(".gameover").addClass("hidden");
+            userPattern = [];
+            winningPattern = [];
+            gameActive = true;
+            startGame();
+        });
+
+        $(".semi-circle").click(function () {
+            $(this).addClass("dark");
+            setTimeout(function () {
+                $(".semi-circle").removeClass("dark");
+            }, 150);
+            if (gameActive === true) {
+                userPattern.push($(this).prop('id'));
+                console.log(userPattern);
+            }
+            if (gameActive === true && userPattern.length === winningPattern.length) {
+                if (userPattern.toString() === winningPattern.toString()) {
+                    console.log("nice!");
+                } else {
+                    gameOver()
+                }
+            }
+        });
+
+    })();
+</script>
+</body>
+</html>
