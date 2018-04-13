@@ -70,3 +70,11 @@ body {
 .hidden {
     display: none;
 }
+.centered {
+    width: 100%;
+    text-align: center;
+}
+
+h3 {
+    color: white
+}
